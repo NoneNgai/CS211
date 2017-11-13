@@ -7,28 +7,43 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
 public class ParagraphReader {
-	private ArrayList<String> List;
-	public static final String NL = null;
+	private ArrayList<String> List = new ArrayList<>();
+	public static final String NL = "";
+	private int linecnt = 0;
+	private String paragraph;
 	public ParagraphReader() {
-		List = new ArrayList<>();
+		
 	}
-	public ParagraphReader(File file) throws IOException {
-		readFile(file);
-	}
-	public void readFile(File file) throws IOException {
-		FileReader f = new FileReader(file);
-		BufferedReader br = new BufferedReader(f);
-		String s = br.readLine();
-		while(s!=null) {
-			//List.add((String)br.readLine());
-			//br.readLine();
-			System.out.println(br.readLine());
+	public ParagraphReader(File file) throws IOException, ClassNotFoundException {
+		FileInputStream f = new FileInputStream(file);
+		InputStreamReader In = new InputStreamReader(f);
+		BufferedReader br = new BufferedReader(In);
+		while(linecnt<=3) {
+			String s = br.readLine();
+			if(s!=null) {
+				paragraph = paragraph + s;
+				if(linecnt>2) {
+					List.add(paragraph);
+				}
+			}
+
+			if(s==null) {
+				if(linecnt==0) {
+					List.add(paragraph);
+					paragraph = "";
+				}
+				linecnt++;
+			}
+			else
+				linecnt=0;
 		}
 		br.close();
 	}
+	public void readFile(File file) throws IOException, ClassNotFoundException {}
 	public void readFile(File file,boolean keptLineBreak) {
 	}
 	public void clear() {
@@ -44,26 +59,14 @@ public class ParagraphReader {
 	protected ArrayList<String> getStringList(){
 		return List;
 	}
-	public static void main(String[] args) throws IOException {
-		ParagraphReader reader = new ParagraphReader(new File("sample.txt"));
-		for (int i=0; i<reader.size(); i++) {
-				System.out.println(i+ " " + reader.get(i));
-				System.out.print("Most freq char of paragraph "+i +": ");
-					try {
-						System.out.println(TextFreqHelper.findMostCommonChar(reader.get(i)));
-					} catch (RuntimeException e) {
-						System.out.println(e.getMessage());
-					}
-				System.out.println("--------------------------");
-			}
-		reader.clear();
-		reader.readFile(new File("sample.txt"), true);
-		for (int i=0; i<reader.size(); i++) {
-			System.out.println(i+ " " + reader.get(i));
-			}
+	/*public static void main(String[] args) throws ClassNotFoundException, IOException {
+		ParagraphReader r = new ParagraphReader(new File("sample.txt"));
+		System.out.println(r.size());
+		for (String list : r.List) {
+			System.out.println(list);
+			
 		}
-		
-		
-	}
+	}*/
+}
 
 
