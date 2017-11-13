@@ -2,32 +2,39 @@ package Assignment4;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 
 public class TextFreqHelper {
 	public static char findMostCommonChar(String paragraph) {
-		/*ArrayList<Character> c = new ArrayList<>();
-		ArrayList<Integer> cnt = new ArrayList<>();
-		int index;
-		char[] ca = paragraph.toCharArray();
-		for(int i=0;i<ca.length;i++) {
-			if(c.contains(ca[i])) {
-				cnt.add(1);
-			}
-		}*/
-		HashMap<Character,Integer> map = new HashMap<Character,Integer>();          
-		String s = "aasjjikkk";
-		for(int i = 0; i < s.length(); i++){
-		   char c = s.charAt(i);
+		char mostfre = ' ';int valtmp = 0;
+		HashMap<Character,Integer> map = new HashMap<Character,Integer>();    
+		for(int i = 0; i < paragraph.length(); i++){
+		   char c = paragraph.charAt(i);
+		   if(isAtoZ(c)) {
 		   Integer val = map.get(new Character(c));
 		   if(val != null){
 		     map.put(c, new Integer(val + 1));
 		   }else{
 		     map.put(c,1);
 		   }
+		   }
 		}
-		return c.get(0);
+		for(Map.Entry<Character,Integer> maps : map.entrySet()) {
+			if(isAtoZ(maps.getKey())) {
+			char c = maps.getKey();
+			int val = maps.getValue();
+			
+			if(valtmp < val) {
+				mostfre = c;
+				valtmp = val;
+			}
+		}
+		}
+		return mostfre;
 	}
-	public boolean isAtoZ(char c) {
+	public static boolean isAtoZ(char c) {
 		if(c >= 'a' && c<= 'z')
 		return true;
 		else if(c >= 'A' && c <= 'Z')

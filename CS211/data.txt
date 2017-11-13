@@ -1,0 +1,9 @@
+This is a new line.
+Insert at pos 0.
+   This is a new line.
+Insert at pos 0.
+   nullInsert  into last line.Insert 
+
+
+
+into last line.

@@ -12,61 +12,118 @@ import java.util.ArrayList;
 
 public class ParagraphReader {
 	private ArrayList<String> List = new ArrayList<>();
-	public static final String NL = "";
+	public static final String NL = " ";
+	TextFreqHelper t = new TextFreqHelper();
+	private String paragraph = null;
 	private int linecnt = 0;
-	private String paragraph;
+
 	public ParagraphReader() {
-		
+		// TODO Auto-generated constructor stub
 	}
+
 	public ParagraphReader(File file) throws IOException, ClassNotFoundException {
+		readFile(file);
+	}
+
+	public void readFile(File file) throws IOException, ClassNotFoundException {
+
 		FileInputStream f = new FileInputStream(file);
 		InputStreamReader In = new InputStreamReader(f);
 		BufferedReader br = new BufferedReader(In);
-		while(linecnt<=3) {
+		linecnt = 0;
+		paragraph = null;
+		while (true) {
 			String s = br.readLine();
-			if(s!=null) {
-				paragraph = paragraph + s;
-				if(linecnt>2) {
-					List.add(paragraph);
-				}
-			}
+			if (s != null) {
+				if (s.isEmpty()) {
+					if (linecnt == 0) {
 
-			if(s==null) {
-				if(linecnt==0) {
-					List.add(paragraph);
+						List.add(paragraph);
+					}
 					paragraph = "";
+					linecnt++;
+					if (linecnt == 3) {
+						List.add(paragraph);
+					}
+				} else {
+					if (paragraph == null)
+						paragraph = s;
+					else
+						paragraph = paragraph + s;
+					if (linecnt > 0) {
+						linecnt = 0;
+					}
 				}
-				linecnt++;
 			}
-			else
-				linecnt=0;
+			if (s == null) {
+				List.add(paragraph);
+				break;
+			}
+		}
+		br.close();
+
+	}
+
+	public void readFile(File file, boolean keptLineBreak) throws IOException {
+		FileInputStream f = new FileInputStream(file);
+		InputStreamReader In = new InputStreamReader(f);
+		BufferedReader br = new BufferedReader(In);
+		linecnt = 0;
+		paragraph = null;
+		while (true) {
+			String s = br.readLine();
+			if (s != null) {
+				if (s.isEmpty()) {
+					if (linecnt == 0) {
+						List.add(paragraph);
+					}
+					paragraph = " ";
+					linecnt++;
+					if (linecnt == 3) {
+						List.add(paragraph);
+					}
+				} else {
+					if (keptLineBreak) {
+						if (paragraph == null)
+							paragraph = s;
+						else if(paragraph==" "&&paragraph!=null)
+							paragraph = s;
+						else {
+							paragraph = paragraph + "\n" + s;
+						}
+					} else {
+						if (paragraph == null)
+							paragraph = s;
+						else 
+							paragraph = paragraph + s;
+					}
+					if (linecnt > 0) {
+						linecnt = 0;
+					}
+				}
+			}
+			if (s == null) {
+				List.add(paragraph);
+				break;
+			}
 		}
 		br.close();
 	}
-	public void readFile(File file) throws IOException, ClassNotFoundException {}
-	public void readFile(File file,boolean keptLineBreak) {
-	}
+
 	public void clear() {
 		List.clear();
 	}
+
 	public int size() {
 		return List.size();
-		
+
 	}
+
 	public String get(int index) {
 		return List.get(index);
 	}
-	protected ArrayList<String> getStringList(){
+
+	protected ArrayList<String> getStringList() {
 		return List;
 	}
-	/*public static void main(String[] args) throws ClassNotFoundException, IOException {
-		ParagraphReader r = new ParagraphReader(new File("sample.txt"));
-		System.out.println(r.size());
-		for (String list : r.List) {
-			System.out.println(list);
-			
-		}
-	}*/
 }
-
-
