@@ -36,6 +36,7 @@ public class EnginePanel extends JPanel{
 					status.WARMUP.nextState(false);
 					status.RUNNING.nextState(false);
 					t.stop();
+					Start.setText("Press to start");
 					repaint();
 				}
 			}
